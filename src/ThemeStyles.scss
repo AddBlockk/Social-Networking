@@ -1,0 +1,124 @@
+.light {
+  background-color: #fff;
+  color: #000;
+}
+
+.dark {
+  background-color: #212121;
+  color: #fff;
+}
+
+.searchIcon {
+  color: #6b6b6b;
+}
+
+.searchInput:focus-within .searchIconLight {
+  color: #3390ec;
+}
+
+.searchInput:focus-within .searchIconDark {
+  color: #8774e1;
+}
+
+.searchIconDark:active {
+  color: #8774e1;
+}
+
+.input-searchDark {
+  background: #2c2c2c;
+  color: white;
+}
+
+.input-searchDark:focus-within {
+  box-shadow: 0 0 0 2px #8774e1;
+}
+
+.input-searchLight {
+  background: #f4f4f5;
+  color: black;
+}
+
+.input-searchLight:focus-within {
+  box-shadow: 0 0 0 2px #3390ec;
+}
+
+.input-searchLight:focus {
+  background: transparent;
+}
+
+.main-container {
+  background-size: 510px auto;
+  background-repeat: repeat;
+  background-position: top right;
+  background-image: url("../public/chat-bg-pattern-dark.png");
+}
+
+.main-containerLight {
+  background-image: linear-gradient(
+    rgba(0, 146, 2, 0.178),
+    rgba(255, 0, 0, 0.242)
+  );
+}
+
+.main-containerDark {
+  background-color: rgba(0, 0, 0, 0.897);
+}
+
+/* Сообщение пользователю */
+
+/* Сообщение от пользователя */
+.dialogContainerLight {
+  background-color: rgba(0, 255, 4, 0.288);
+}
+
+.dialogContainerDark {
+  background-color: black;
+}
+
+.dialogFromYou {
+  background-color: #766ac8;
+}
+
+.darkDialogFromYou {
+  background-color: #766ac8;
+}
+
+.lightDialogFromYou {
+  background-color: #eeffde;
+  color: black;
+}
+
+.lightMarkFromYou {
+  border-bottom-color: #eeffde;
+}
+
+.darkMarkFromYou {
+  border-bottom-color: #766ac8;
+}
+
+.darkDialogToYou {
+  background-color: #444444;
+}
+
+.lightDialogToYou {
+  background-color: #fff;
+  color: #000;
+}
+
+.lightMarkToYou {
+  border-bottom-color: #ffffff;
+}
+
+.darkMarkToYou {
+  border-bottom-color: #444444;
+}
+
+// Окно меню
+
+.windowMenuMarkLight {
+  background-color: white;
+}
+
+.windowMenuMarkDark {
+  background-color: red;
+}

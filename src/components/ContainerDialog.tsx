@@ -4,7 +4,7 @@ import MessageFromYou from "./MessageFromYou";
 
 function ContainerDialog() {
   return (
-    <div className="h-[90%] bg-gray-200 py-[18px] w-full relative">
+    <div className="h-[90%] py-[18px] w-full relative">
       <div className="mb-[10px]">
         <MessageToYou />
       </div>
