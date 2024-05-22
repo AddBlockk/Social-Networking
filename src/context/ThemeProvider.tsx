@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import GlobalStyles from "./GlobalStyles";
+import GlobalStyles from "../GlobalStyles";
 import { DefaultTheme } from "styled-components";
 
 type Theme = DefaultTheme & { themeType: "light" | "dark" };

@@ -4,8 +4,10 @@ import ContainerDialog from "./ContainerDialog";
 
 function Dialog() {
   return (
-    <div className="h-screen flex justify-center relative w-[70%]">
-      <ContainerDialog />
+    <div className="h-screen flex flex-col">
+      <div className="flex-grow overflow-y-auto dialog-messages">
+        <ContainerDialog />
+      </div>
       <EditableMessage />
     </div>
   );

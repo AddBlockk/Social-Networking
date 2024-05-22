@@ -1,11 +1,45 @@
+$darkColor: #000;
+$lightColor: #fff;
+$searchIconColor: #6b6b6b;
+$searchIconColorFocus: #3390ec;
+$searchIconColorActive: #8774e1;
+$inputSearchBgLight: #f4f4f5;
+$inputSearchBgDark: #2c2c2c;
+$inputSearchBoxShadow: 0 0 0 2px;
+$dialogFromYouBg: #766ac8;
+$dialogFromYouBgLight: #eeffde;
+$dialogToYouBgDark: #444444;
+
 .light {
-  background-color: #fff;
-  color: #000;
+  background-color: $lightColor;
+  color: $darkColor;
+
+  &.dialogContainer {
+    background-color: rgba($lightColor, 0.288);
+  }
+
+  &.dialogFromYou {
+    background-color: $dialogFromYouBgLight;
+    color: $darkColor;
+  }
+
+  &.dialogToYou {
+    background-color: $lightColor;
+    color: $darkColor;
+  }
 }
 
 .dark {
   background-color: #212121;
   color: #fff;
+}
+
+.textDark {
+  color: #fff;
+}
+
+.textLight {
+  color: $darkColor;
 }
 
 .searchIcon {
@@ -35,7 +69,7 @@
 
 .input-searchLight {
   background: #f4f4f5;
-  color: black;
+  color: $darkColor;
 }
 
 .input-searchLight:focus-within {
@@ -43,7 +77,7 @@
 }
 
 .input-searchLight:focus {
-  background: transparent;
+  background: white;
 }
 
 .main-container {
@@ -66,26 +100,12 @@
 
 /* Сообщение пользователю */
 
-/* Сообщение от пользователя */
-.dialogContainerLight {
-  background-color: rgba(0, 255, 4, 0.288);
-}
-
-.dialogContainerDark {
-  background-color: black;
-}
-
 .dialogFromYou {
   background-color: #766ac8;
 }
 
 .darkDialogFromYou {
   background-color: #766ac8;
-}
-
-.lightDialogFromYou {
-  background-color: #eeffde;
-  color: black;
 }
 
 .lightMarkFromYou {
@@ -102,7 +122,7 @@
 
 .lightDialogToYou {
   background-color: #fff;
-  color: #000;
+  color: $darkColor;
 }
 
 .lightMarkToYou {
@@ -121,4 +141,46 @@
 
 .windowMenuMarkDark {
   background-color: red;
+}
+
+.dialog-messages {
+  scrollbar-width: none; /* Для Firefox */
+}
+
+.dialog-messages::-webkit-scrollbar {
+  display: none; /* Для Chrome, Safari и Opera */
+}
+
+/*Убрать полосу прокрутки у элемента*/
+.element::-webkit-scrollbar {
+  width: 0;
+}
+
+/*Убрать полосу прокрутки для всей страницы*/
+::-webkit-scrollbar {
+  width: 0;
+}
+
+.custom-scrollbarDark::-webkit-scrollbar-track {
+  background-color: none; /* Тёмный цвет фона полосы прокрутки */
+}
+
+.custom-scrollbarDark::-webkit-scrollbar-thumb {
+  background-color: #323232; /* Тёмный цвет самой полосы прокрутки */
+}
+
+.custom-scrollbarDark::-webkit-scrollbar {
+  width: 6px; /* Ширина полосы прокрутки */
+}
+
+.custom-scrollbarLight::-webkit-scrollbar-track {
+  background-color: none; /* Тёмный цвет фона полосы прокрутки */
+}
+
+.custom-scrollbarLight::-webkit-scrollbar-thumb {
+  background-color: #cdcdcd; /* Тёмный цвет самой полосы прокрутки */
+}
+
+.custom-scrollbarLight::-webkit-scrollbar {
+  width: 6px; /* Ширина полосы прокрутки */
 }

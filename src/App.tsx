@@ -1,27 +1,44 @@
-import React, { useContext } from "react";
-import SideBar from "./components/SideBar";
-import Dialog from "./components/Dialog";
-import { ThemeContext } from "./ThemeProvider";
-import "./ThemeStyles.scss";
+import React, { FC, useContext } from "react";
 
-function Main() {
-  const { theme, toggleTheme } = useContext<ThemeContext>(ThemeContext);
+import "./ThemeStyles.scss";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
+import Home from "./pages/Home";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  Outlet,
+} from "react-router-dom";
+import { AuthContext } from "./context/AuthContext";
+
+function App() {
+  const { currentUser } = useContext(AuthContext);
+
+  const ProtectedRoute: FC = () => {
+    const { currentUser } = useContext(AuthContext);
+
+    if (!currentUser) {
+      return <Navigate to="/login" />;
+    }
+
+    return <Outlet />;
+  };
+
   return (
-    <div
-      className={`flex relative h-screen app main-container ${
-        theme.themeType === "light"
-          ? "main-containerLight"
-          : "main-containerDark"
-      }`}>
-      <div className="w-[25%]">
-        <SideBar />
-      </div>
-      <div className="absolute top-0 left-[25%] bottom-0 right-0"></div>
-      <div className="absolute top-0 left-[25%] bottom-0 right-0 flex justify-center">
-        <Dialog />
-      </div>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/">
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<Home />} />
+          </Route>
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
-export default Main;
+export default App;

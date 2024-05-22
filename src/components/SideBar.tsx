@@ -1,8 +1,6 @@
 import React, { useState, useContext } from "react";
 import {
-  Avatar,
   Box,
-  Divider,
   IconButton,
   ListItemIcon,
   Menu,
@@ -12,17 +10,23 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase";
+import { AuthContext } from "../context/AuthContext";
 import AllChats from "./AllChats";
 import PersonalChats from "./PersonalChats";
 import ContrastIcon from "@mui/icons-material/Contrast";
-import { ThemeContext } from "../ThemeProvider";
+import { ThemeContext } from "../context/ThemeProvider";
 import "../ThemeStyles.scss";
-
 function SideBar() {
   const [isInputFocused, setIsInputFocused] = useState(false);
+
+  interface User {
+    displayName: string;
+    photoURL: string | null;
+  }
 
   const handleInputFocus = () => {
     setIsInputFocused(true);
@@ -31,15 +35,22 @@ function SideBar() {
   const handleInputBlur = () => {
     setIsInputFocused(false);
   };
+
   const { theme, toggleTheme } = useContext<ThemeContext>(ThemeContext);
   const [isNightMode, setIsNightMode] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const { currentUser } = useContext(AuthContext);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleOut = () => {
+    signOut(auth);
   };
 
   const [selectedTab, setSelectedTab] = useState("all");
@@ -113,24 +124,6 @@ function SideBar() {
           }}
           transformOrigin={{ horizontal: "right", vertical: "top" }}
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
-          {/* <MenuItem onClick={handleClose}>
-            <Avatar /> Profile
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <Avatar /> My account
-          </MenuItem>
-          <Divider /> */}
-          {/* <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <PersonAdd
-                fontSize="small"
-                sx={{
-                  color: theme.themeType === "light" ? "#707579" : "white",
-                }}
-              />
-            </ListItemIcon>
-            Add another account
-          </MenuItem> */}
           <MenuItem onClick={handleSwitchClick}>
             <ListItemIcon>
               <ContrastIcon
@@ -155,7 +148,7 @@ function SideBar() {
             </ListItemIcon>
             Settings
           </MenuItem>
-          <MenuItem onClick={handleClose}>
+          <MenuItem onClick={handleOut}>
             <ListItemIcon>
               <Logout
                 fontSize="small"
@@ -193,7 +186,15 @@ function SideBar() {
           />
         </div>
       </div>
-
+      {currentUser && (
+        <>
+          <img
+            src={currentUser.photoURL || "/path/to/default/image.jpg"}
+            alt=""
+          />
+          <span>{currentUser.displayName}</span>
+        </>
+      )}
       {/* Список */}
       <div className="text-[#aaaaaa] flex gap-5 px-[13px] mt-[30px]">
         <div
@@ -245,7 +246,12 @@ function SideBar() {
       </div>
 
       {/* Компоненты */}
-      <div className="mt-[20px] ml-[5px]">
+      <div
+        className={`mt-[20px] ml-[5px] pr-[15px] h-[calc(100vh-138px)] overflow-y-auto overflow-x-hidden ${
+          theme.themeType === "light"
+            ? "custom-scrollbarLight"
+            : "custom-scrollbarDark"
+        }`}>
         {selectedTab === "all" && <AllChats />}
         {selectedTab === "personal" && <PersonalChats />}
         {selectedTab === "unread" && (
