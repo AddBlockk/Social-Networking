@@ -10,7 +10,8 @@ root.render(
   <AuthContextProvider>
     <React.StrictMode>
       <ThemeProvider>
-        <App />
+        {/* <App /> */}
+        test
       </ThemeProvider>
     </React.StrictMode>
   </AuthContextProvider>
