@@ -173,7 +173,7 @@ function Register() {
               />
               <label
                 htmlFor="file"
-                className="my-[10px] flex gap-3 items-center cursor-pointer text-white">
+                className="my-[10px] flex gap-5 items-center cursor-pointer text-white justify-center">
                 <AddAPhotoIcon />
                 {showExpectationMessage && !photoUploaded && (
                   <span>Добавьте фотографию</span>
@@ -215,12 +215,17 @@ function Register() {
                   Подождите пока загрузятся данные
                 </span>
               )}
-              {showErrorMessage && <span>Что-то пошло не так</span>}
+              {showErrorMessage && (
+                <span className="text-red-600">Что-то пошло не так</span>
+              )}
             </div>
           </form>
         </div>
-        <p className="my-[10px]">
-          Уже есть аккаунт? <Link to="/register">Логин</Link>
+        <p className="my-[10px] flex justify-center gap-5">
+          Уже есть аккаунт?
+          <Link to="/login" className="text-[#ffeb99] hover:text-[#ffeb999e]">
+            Логин
+          </Link>
         </p>
       </div>
     </div>
