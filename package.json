@@ -2,7 +2,7 @@
   "name": "social-networking-service",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://social-networking-rosy.vercel.app",
+  "homepage": "https://social-networking-silk.vercel.app",
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
