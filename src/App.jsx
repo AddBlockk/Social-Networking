@@ -8,17 +8,17 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthContext } from "./context/AuthContext";
 
 function App() {
-  type ProtectedRouteProps = PropsWithChildren<{}>;
+  // type ProtectedRouteProps = PropsWithChildren<{}>;
 
-  const ProtectedRoute: FC<ProtectedRouteProps> = ({ children }) => {
-    const { currentUser } = useContext(AuthContext);
+  // const ProtectedRoute: FC<ProtectedRouteProps> = ({ children }) => {
+  //   const { currentUser } = useContext(AuthContext);
 
-    if (!currentUser) {
-      return <Navigate to="/login" />;
-    }
+  //   if (!currentUser) {
+  //     return <Navigate to="/login" />;
+  //   }
 
-    return <>{children}</>;
-  };
+  //   return <>{children}</>;
+  // };
 
   return (
     <BrowserRouter>
@@ -27,9 +27,9 @@ function App() {
           <Route
             index
             element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
+              // <ProtectedRoute>
+              <Home />
+              // </ProtectedRoute>
             }
           />
           <Route path="login" element={<Login />} />
