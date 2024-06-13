@@ -4,15 +4,21 @@ import "./index.css";
 import App from "./App";
 import { ThemeProvider } from "./context/ThemeProvider";
 import { AuthContextProvider } from "./context/AuthContext";
+import { ChatContextProvider } from "./context/ChatContext";
+
+function Main() {
+  return (
+    <AuthContextProvider>
+      <ChatContextProvider>
+        <React.StrictMode>
+          <ThemeProvider>
+            <App />
+          </ThemeProvider>
+        </React.StrictMode>
+      </ChatContextProvider>
+    </AuthContextProvider>
+  );
+}
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <AuthContextProvider>
-    <React.StrictMode>
-      <ThemeProvider>
-        <App />
-        test
-      </ThemeProvider>
-    </React.StrictMode>
-  </AuthContextProvider>
-);
+root.render(<Main />);

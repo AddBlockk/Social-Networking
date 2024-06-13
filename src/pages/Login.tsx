@@ -43,7 +43,7 @@ function Login() {
     <div
       className={`${
         theme.themeType === "light" ? "light" : "dark"
-      } h-screen flex justify-center items-center`}>
+      } h-screen flex justify-center items-center register-background`}>
       <div
         className={`${
           theme.themeType === "light" ? "dark" : "light"

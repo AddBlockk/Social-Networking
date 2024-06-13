@@ -14,7 +14,7 @@ function Home() {
       <div className="max-w-[400px] min-w-[400px] relative">
         <SideBar />
       </div>
-      <div className="flex-1 flex justify-center">
+      <div className="block w-full justify-center">
         <Dialog />
       </div>
     </div>

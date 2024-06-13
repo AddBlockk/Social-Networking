@@ -1,5 +1,18 @@
 import React, { useState, useContext } from "react";
 import {
+  collection,
+  query,
+  where,
+  getDocs,
+  setDoc,
+  doc,
+  updateDoc,
+  serverTimestamp,
+  getDoc,
+} from "firebase/firestore";
+import { db } from "../firebase";
+import {
+  Avatar,
   Box,
   IconButton,
   ListItemIcon,
@@ -20,12 +33,50 @@ import PersonalChats from "./PersonalChats";
 import ContrastIcon from "@mui/icons-material/Contrast";
 import { ThemeContext } from "../context/ThemeProvider";
 import "../ThemeStyles.scss";
+
 function SideBar() {
+  const [username, setUsername] = useState("");
+  const [user, setUser] = useState<User | null>(null);
+  const [err, setErr] = useState(false);
+
+  const handleSearch = async () => {
+    const q = query(
+      collection(db, "users"),
+      where("displayName", "==", username)
+    );
+
+    try {
+      const querySnapshot = await getDocs(q);
+      if (querySnapshot.empty) {
+        setErr(true);
+      } else {
+        querySnapshot.forEach((doc) => {
+          const userData = doc.data();
+          setUser({
+            displayName: userData.displayName,
+            photoURL: userData.photoURL,
+            uid: userData.uid,
+          });
+        });
+        setErr(false);
+      }
+    } catch (error) {
+      console.log("gdfg");
+      setErr(true);
+    }
+  };
+
+  const handleKey = (e: { code: string }) => {
+    if (e.code === "Enter") {
+      handleSearch();
+    }
+  };
   const [isInputFocused, setIsInputFocused] = useState(false);
 
   interface User {
     displayName: string;
-    photoURL: string | null;
+    photoURL: string;
+    uid: string;
   }
 
   const handleInputFocus = () => {
@@ -63,6 +114,43 @@ function SideBar() {
     setIsNightMode(!isNightMode);
     toggleTheme();
     event.stopPropagation();
+  };
+
+  const handleSelect = async () => {
+    const combinedId =
+      currentUser!.uid > user!.uid
+        ? currentUser!.uid + user!.uid
+        : user!.uid + currentUser!.uid;
+    try {
+      const res = await getDoc(doc(db, "chats", combinedId));
+
+      if (!res.exists()) {
+        //create a chat in chats collection
+        await setDoc(doc(db, "chats", combinedId), { messages: [] });
+
+        //create user chats
+        await updateDoc(doc(db, "userChats", currentUser!.uid), {
+          [combinedId + ".userInfo"]: {
+            uid: user!.uid,
+            displayName: user!.displayName,
+            photoURL: user!.photoURL,
+          },
+          [combinedId + ".date"]: serverTimestamp(),
+        });
+
+        await updateDoc(doc(db, "userChats", user!.uid), {
+          [combinedId + ".userInfo"]: {
+            uid: currentUser!.uid,
+            displayName: currentUser!.displayName,
+            photoURL: currentUser!.photoURL,
+          },
+          [combinedId + ".date"]: serverTimestamp(),
+        });
+      }
+    } catch (err) {}
+
+    setUser(null);
+    setUsername("");
   };
 
   return (
@@ -160,7 +248,9 @@ function SideBar() {
             Logout
           </MenuItem>
         </Menu>
+
         {/* Поле поиска */}
+
         <div className="searchInput relative w-full">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
             <SearchIcon
@@ -174,27 +264,45 @@ function SideBar() {
             />
           </div>
           <input
-            type="search"
+            type="text"
             className={`rounded-full h-[2.5rem] mb-[0] pt-[6px] pb-[7px] pl-[43px] w-full focus:outline-none focus:ring-[2px] ${
               theme.themeType === "light"
                 ? "input-searchLight"
                 : "input-searchDark"
             }`}
             placeholder="Search"
+            onKeyDown={handleKey}
+            onChange={(e) => setUsername(e.target.value)}
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
+            value={username}
           />
         </div>
       </div>
-      {currentUser && (
-        <>
-          <img
-            src={currentUser.photoURL || "/path/to/default/image.jpg"}
-            alt=""
-          />
-          <span>{currentUser.displayName}</span>
-        </>
+      {err && <span>Пользователь не найден</span>}
+
+      {user && (
+        <div
+          onClick={handleSelect}
+          className={`flex items-center gap-5 relative ml-[5px] mt-[20px] cursor-pointer px-[5px] py-[5px] rounded-lg ${
+            theme.themeType === "light"
+              ? "hover:bg-[#f4f4f5]"
+              : "hover:bg-[#2c2c2c]"
+          }`}>
+          <div className="flex items-center">
+            <Avatar alt="" src={user.photoURL} />
+          </div>
+          <div className="w-full flex flex-col items-start">
+            <p
+              className={`text-white truncate text-ellipsis  ${
+                theme.themeType === "light" ? "textLight" : "textDark"
+              }`}>
+              {user.displayName}
+            </p>
+          </div>
+        </div>
       )}
+
       {/* Список */}
       <div className="text-[#aaaaaa] flex gap-5 px-[13px] mt-[30px]">
         <div
@@ -247,7 +355,7 @@ function SideBar() {
 
       {/* Компоненты */}
       <div
-        className={`mt-[20px] ml-[5px] pr-[15px] h-[calc(100vh-138px)] overflow-y-auto overflow-x-hidden ${
+        className={`mt-[20px] pl-[5px] pr-[15px] h-[calc(100vh-138px)] overflow-y-auto overflow-x-hidden ${
           theme.themeType === "light"
             ? "custom-scrollbarLight"
             : "custom-scrollbarDark"

@@ -84,7 +84,7 @@ $dialogToYouBgDark: #444444;
   background-size: 510px auto;
   background-repeat: repeat;
   background-position: top right;
-  background-image: url("../public/chat-bg-pattern-dark.png");
+  background-image: url("../public/img/chat-bg-pattern-dark.png");
 }
 
 .main-containerLight {
@@ -183,4 +183,10 @@ $dialogToYouBgDark: #444444;
 
 .custom-scrollbarLight::-webkit-scrollbar {
   width: 6px; /* Ширина полосы прокрутки */
+}
+
+// Регистрация
+
+.register-background {
+  background-image: url("../public/img/chat-bg-pattern-dark.png");
 }
