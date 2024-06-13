@@ -6,19 +6,15 @@ import { ThemeProvider } from "./context/ThemeProvider";
 import { AuthContextProvider } from "./context/AuthContext";
 import { ChatContextProvider } from "./context/ChatContext";
 
-function Main() {
-  return (
-    <AuthContextProvider>
-      <ChatContextProvider>
-        <React.StrictMode>
-          <ThemeProvider>
-            <App />
-          </ThemeProvider>
-        </React.StrictMode>
-      </ChatContextProvider>
-    </AuthContextProvider>
-  );
-}
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<Main />);
+root.render(
+  <AuthContextProvider>
+    <ChatContextProvider>
+      <React.StrictMode>
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
+      </React.StrictMode>
+    </ChatContextProvider>
+  </AuthContextProvider>
+);
