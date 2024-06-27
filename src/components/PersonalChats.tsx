@@ -7,7 +7,7 @@ function PersonalChats() {
 
   return (
     <div>
-      <div className="flex items-center gap-5 relative ">
+      {/* <div className="flex items-center gap-5 relative ">
         <Avatar alt="Ф Sharp" src="/static/images/avatar/1.jpg" />
         <div className="w-full max-w-[82%]">
           <p
@@ -20,7 +20,7 @@ function PersonalChats() {
             fsdlfldsfldfldlfldsfldslfldfldslfldslфффффффааааа
           </p>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

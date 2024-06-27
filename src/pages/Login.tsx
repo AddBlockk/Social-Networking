@@ -1,13 +1,18 @@
 import React, { useContext, useState } from "react";
 import { ThemeContext } from "../context/ThemeProvider";
 import "../ThemeStyles.scss";
-import { Button } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
+import { Button, ListItemIcon, MenuItem, Box, Switch } from "@mui/material";
+import ContrastIcon from "@mui/icons-material/Contrast";
 
-function Login() {
-  const { theme } = useContext<ThemeContext>(ThemeContext);
+interface LoginProps {
+  isNightMode: boolean;
+}
+
+function Login({ isNightMode }: LoginProps) {
+  const { theme, toggleTheme } = useContext<ThemeContext>(ThemeContext);
   const [err, setErr] = useState(false);
   const navigate = useNavigate();
   const [isInputFocused, setIsInputFocused] = useState(false);
@@ -39,6 +44,11 @@ function Login() {
     }
   };
 
+  const handleSwitchClick = (event: React.MouseEvent<HTMLLIElement>) => {
+    toggleTheme();
+    event.stopPropagation();
+  };
+
   return (
     <div
       className={`${
@@ -47,16 +57,16 @@ function Login() {
       <div
         className={`${
           theme.themeType === "light" ? "dark" : "light"
-        } px-[120px] py-[80px] rounded-md`}>
+        } w-full max-w-[600px] py-[80px] rounded-md mx-[30px]`}>
         <form
           className="flex flex-col items-center my-[10px]"
           onSubmit={handleSubmit}>
           <h1 className="text-[32px] font-bold">Social Chat</h1>
           <p className="text-[14px]">Логин</p>
-          <div className="flex flex-col gap-8 mt-8 text-black min-w-[300px] max-w-[300px]">
+          <div className="flex flex-col gap-8 mt-8 text-black w-full max-w-[360px] px-[10px]">
             <input
               type="email"
-              className={`rounded-full h-[2.5rem] mb-[0] pt-[6px] pb-[7px] pr-[20px] pl-[20px] w-full focus:outline-none focus:ring-[2px] ${
+              className={`rounded-full h-[2.5rem] mb-[0] pt-[6px] pb-[7px] pr-[20px] pl-[20px] max-w-[360px]" focus:outline-none focus:ring-[2px] ${
                 theme.themeType === "light"
                   ? "input-searchLight"
                   : "input-searchDark"
@@ -67,7 +77,7 @@ function Login() {
             />
             <input
               type="password"
-              className={`rounded-full h-[2.5rem] mb-[0] pt-[6px] pb-[7px] pr-[20px] pl-[20px] w-full focus:outline-none focus:ring-[2px] ${
+              className={`rounded-full h-[2.5rem] mb-[0] pt-[6px] pb-[7px] pr-[20px] pl-[20px] max-w-[360px] focus:outline-none focus:ring-[2px] ${
                 theme.themeType === "light"
                   ? "input-searchLight"
                   : "input-searchDark"
@@ -85,7 +95,8 @@ function Login() {
               margin: "32px 0",
               fontSize: "16px",
               textTransform: "capitalize",
-              width: "100%",
+              maxWidth: "100%",
+              width: "300px",
             }}
             variant="contained">
             Войти
@@ -104,11 +115,26 @@ function Login() {
             Ещё нет аккаунта?
             <Link
               to="/register"
-              className="text-[#ffeb99] hover:text-[#ffeb999e]">
+              className="text-[#8774E1] hover:text-[#766ac8] font-semibold">
               Регистрация
             </Link>
           </p>
         </form>
+      </div>
+      <div className="absolute right-5 bottom-5 bg-[#8774E1] text-[white] rounded-lg">
+        <MenuItem onClick={handleSwitchClick}>
+          <ListItemIcon>
+            <ContrastIcon
+              fontSize="small"
+              sx={{
+                color: "white",
+              }}
+            />
+          </ListItemIcon>
+          Night Mode
+          <Box sx={{ flexGrow: 1 }} />
+          <Switch checked={isNightMode} />
+        </MenuItem>
       </div>
     </div>
   );

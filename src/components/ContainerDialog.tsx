@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { ChatContext } from "../context/ChatContext";
 import { db } from "../firebase";
 import { doc, onSnapshot } from "firebase/firestore";
@@ -18,6 +18,14 @@ function ContainerDialog() {
   const { data } = useContext(ChatContext);
   const { currentUser } = useContext(AuthContext);
 
+  const messagesEndRef = useRef<null | HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(scrollToBottom, [messages]);
+
   useEffect(() => {
     if (currentUser) {
       const unSub = onSnapshot(doc(db, "chats", data.chatId), (doc) => {
@@ -35,16 +43,17 @@ function ContainerDialog() {
   );
 
   return (
-    <div className="h-full px-[40px] xl:px-[80px] w-full mt-[30px]">
+    <div className="h-full px-[40px] xl:px-[80px] mt-[20px] w-full">
       {sortedMessages.map((m) => (
         <div
           key={m.id}
           className={`mb-[10px] ${
-            m.senderId === currentUser?.uid ? "justify-end" : ""
+            m.senderId === currentUser?.uid ? "flex justify-end" : ""
           }`}>
-          <MessageChat message={m} />
+          <MessageChat key={m.id} message={m} messagesEndRef={messagesEndRef} />
         </div>
       ))}
+      <div ref={messagesEndRef} />
     </div>
   );
 }

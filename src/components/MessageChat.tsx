@@ -2,13 +2,16 @@ import React, { useContext, useEffect, useRef } from "react";
 import { ThemeContext } from "../context/ThemeProvider";
 import "../ThemeStyles.scss";
 import { MessageType } from "../components/ContainerDialog";
+import { AuthContext } from "../context/AuthContext";
 
 interface MessageChatProps {
   message: MessageType;
+  messagesEndRef: React.RefObject<HTMLDivElement | null>;
 }
 
 function MessageChat({ message }: MessageChatProps) {
   const ref = useRef<HTMLElement>(null);
+  const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
     if (message.text !== "") {
@@ -16,14 +19,25 @@ function MessageChat({ message }: MessageChatProps) {
     }
   }, [message]);
 
+  const isCurrentUser = currentUser?.uid === message.senderId;
   const { theme } = useContext<ThemeContext>(ThemeContext);
+
+  const dialogFromYouStyle = {
+    backgroundColor: theme.themeType === "light" ? "#eeffde" : "#766ac8",
+  };
+
+  const dialogToYouStyle = {
+    backgroundColor: theme.themeType === "light" ? "#fff" : "#2c2c2c",
+  };
+
   return (
     <div
-      className={`inline-flex pt-[5px] pr-[20px] pb-[6px] pl-[20px] mr-[10px] rounded-b-lg rounded-tl-lg z-10 text-white max-w-[50%] relative justify-end shadow-md ${
+      className={`${isCurrentUser ? "dialogFromYou" : "dialogToYou"} ${
         theme.themeType === "light"
           ? "light dialogFromYou"
           : "dark dialogFromYou"
-      }`}>
+      }`}
+      style={isCurrentUser ? dialogFromYouStyle : dialogToYouStyle}>
       <p className="break-all">{message.text}</p>
     </div>
   );

@@ -1,11 +1,11 @@
+import React, { useContext, useEffect, useState, memo } from "react";
 import { Avatar } from "@mui/material";
 import { doc, onSnapshot, Timestamp } from "firebase/firestore";
-import React, { useContext, useEffect, useState } from "react";
-import { ThemeContext } from "../context/ThemeProvider";
-import "../ThemeStyles.scss";
 import { db } from "../firebase";
 import { AuthContext } from "../context/AuthContext";
 import { ChatContext } from "../context/ChatContext";
+import { ThemeContext, Theme } from "../context/ThemeProvider";
+import ChatItem from "./ChatItem";
 
 interface UserInfo {
   displayName: string;
@@ -14,11 +14,11 @@ interface UserInfo {
 }
 
 interface Chat {
-  id: string; // уникальный идентификатор чата
-  users: string[]; // массив из идентификаторов пользователей, участвующих в чате
+  id: string;
+  users: string[];
   lastMessage: {
-    text: string; // текст последнего сообщения в чате
-    senderId: string; // идентификатор отправителя последнего сообщения
+    text: string;
+    senderId: string;
     date: Timestamp;
   };
   displayName: string;
@@ -32,6 +32,7 @@ function AllChats() {
   const { theme } = useContext<ThemeContext>(ThemeContext);
   const { currentUser } = useContext(AuthContext);
   const { dispatch } = useContext(ChatContext);
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
   useEffect(() => {
     const getChats = () => {
@@ -61,6 +62,7 @@ function AllChats() {
   const handleSelect = (u: Chat) => {
     if (typeof dispatch === "function" && u.userInfo.uid) {
       dispatch({ type: "CHANGE_USER", payload: { uid: u.userInfo.uid } });
+      setSelectedUserId(u.userInfo.uid);
     }
   };
 
@@ -70,45 +72,19 @@ function AllChats() {
 
   return (
     <div>
-      {Object.entries(chats)
-        .sort(
-          (a, b) =>
-            (b[1].lastMessage?.date?.toMillis() || 0) -
-            (a[1].lastMessage?.date?.toMillis() || 0)
-        )
-        .map((chat) => (
-          <div
-            key={chat[0]}
-            onClick={() => handleSelect(chat[1])}
-            className={`cursor-pointer px-[5px] py-[5px] rounded-lg ${
-              theme.themeType === "light"
-                ? "hover:bg-[#f4f4f5]"
-                : "hover:bg-[#2c2c2c]"
-            }`}>
-            <div className="flex items-center gap-5 relative max-w-[85%]">
-              <Avatar
-                alt={chat[1].userInfo.displayName}
-                src={chat[1].userInfo.photoURL}
-              />
-              <div className="w-full">
-                <p
-                  className={`text-white truncate text-ellipsis ${
-                    theme.themeType === "light" ? "textLight" : "textDark"
-                  }`}>
-                  {chat[1].userInfo.displayName
-                    ? chat[1].userInfo.displayName
-                    : "Нету такого пользователя"}
-                </p>
-                <div className="flex justify-between text-[#aaaaaa]">
-                  <p className="truncate text-ellipsis max-w-[80%]">
-                    {chat[1].lastMessage?.text}
-                  </p>
-                  <p>{chat[1].lastMessage?.date?.toMillis()}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
+      {chats.length > 0 &&
+        chats
+          .filter((chat) => chat.date !== null)
+          .sort((a, b) => b.date.toMillis() - a.date.toMillis())
+          .map((chat) => (
+            <ChatItem
+              key={chat.id}
+              chat={chat}
+              handleSelect={handleSelect}
+              selectedUserId={selectedUserId}
+              theme={theme}
+            />
+          ))}
     </div>
   );
 }

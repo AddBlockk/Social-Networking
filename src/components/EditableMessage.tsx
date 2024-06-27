@@ -19,7 +19,6 @@ function EditableMessage() {
   const [text, setText] = useState("");
   const { currentUser } = useContext(AuthContext);
   const { data } = useContext(ChatContext);
-  // const [inputValue, setInputValue] = useState("");
   const { theme } = useContext<ThemeContext>(ThemeContext);
 
   const sendIconColor =
@@ -30,9 +29,13 @@ function EditableMessage() {
       : "#a2acb4";
   const disabled = text.length <= 0 ? "not-allowed" : "";
 
-  const handleSend = async () => {
+  const handleSend = async (
+    event:
+      | React.FormEvent<HTMLFormElement>
+      | React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    event.preventDefault();
     if (!text) {
-      console.log("текст не набран");
       return;
     }
 
@@ -68,10 +71,24 @@ function EditableMessage() {
     }
   };
 
+  const onFormSubmit = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleSend(event);
+    }
+  };
+
+  if (data.chatId === "null") {
+    return null;
+  }
+
   return (
-    <div className="mt-[10px] px-[40px] xl:px-[80px] bottom-0 w-full justify-center flex mb-[30px] items-center gap-5">
+    <form
+      onSubmit={handleSend}
+      className="mt-[10px] px-[40px] xl:px-[80px] bottom-0 w-full justify-center flex mb-[30px] items-center gap-5">
       <input
         onChange={(e) => setText(e.target.value)}
+        onKeyDown={onFormSubmit}
         type="text"
         className={` rounded-full py-[18px] w-full text-white placeholder-[#a2acb4] pl-[43px] focus:outline-none ${
           theme.themeType === "light" ? "light" : "dark"
@@ -80,7 +97,7 @@ function EditableMessage() {
         value={text}
       />
       <button
-        onClick={handleSend}
+        type="submit"
         className={`bg-black rounded-full ${
           theme.themeType === "light" ? "light" : "dark"
         }`}>
@@ -96,7 +113,7 @@ function EditableMessage() {
           />
         </IconButton>
       </button>
-    </div>
+    </form>
   );
 }
 

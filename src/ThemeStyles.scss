@@ -101,7 +101,45 @@ $dialogToYouBgDark: #444444;
 /* Сообщение пользователю */
 
 .dialogFromYou {
-  background-color: #766ac8;
+  display: inline-flex;
+  padding-top: 5px;
+  padding-right: 20px;
+  padding-bottom: 6px;
+  padding-left: 20px;
+  margin-right: 10px;
+  border-bottom-right-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
+  z-index: 10;
+  color: white;
+  justify-content: end;
+  max-width: 50%;
+  position: relative;
+  --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color),
+    0 2px 4px -2px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.dialogToYou {
+  display: inline-flex;
+  padding-top: 5px;
+  padding-right: 20px;
+  padding-bottom: 6px;
+  padding-left: 20px;
+  margin-left: 10px;
+  border-top-left-radius: 0rem;
+  border-top-right-radius: 0.5rem;
+  z-index: 10;
+  color: white;
+  max-width: 50%;
+  position: relative;
+  --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color),
+    0 2px 4px -2px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
 .darkDialogFromYou {
