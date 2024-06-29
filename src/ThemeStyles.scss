@@ -84,18 +84,19 @@ $dialogToYouBgDark: #444444;
   background-size: 510px auto;
   background-repeat: repeat;
   background-position: top right;
-  background-image: url("../public/img/chat-bg-pattern-dark.png");
+  background-image: url("../public/img/chat-bg-pattern-dark.png"),
+    linear-gradient(rgba(37, 133, 39, 0.255), rgba(255, 0, 0, 0.119));
 }
 
-.main-containerLight {
-  background-image: linear-gradient(
-    rgba(0, 146, 2, 0.178),
-    rgba(255, 0, 0, 0.242)
-  );
-}
+// .main-containerLight {
+//   background-image: linear-gradient(
+//     rgba(0, 146, 2, 0.178),
+//     rgba(255, 0, 0, 0.242)
+//   );
+// }
 
 .main-containerDark {
-  background-color: rgba(0, 0, 0, 0.897);
+  background-color: rgb(0, 0, 0);
 }
 
 /* Сообщение пользователю */

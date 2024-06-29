@@ -20,7 +20,6 @@ interface RegisterProps {
 
 function Register({ isNightMode }: RegisterProps) {
   const [err, setErr] = useState(false);
-
   const { theme, toggleTheme } = useContext<ThemeContext>(ThemeContext);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [showLoadingMessage, setShowLoadingMessage] = useState(false);
@@ -28,7 +27,6 @@ function Register({ isNightMode }: RegisterProps) {
   const [photoUploaded, setPhotoUploaded] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [errFile, setErrFile] = useState<string>("");
-
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const navigate = useNavigate();
 
@@ -199,7 +197,6 @@ function Register({ isNightMode }: RegisterProps) {
               onFocus={handleInputFocus}
               onBlur={handleInputBlur}
             />
-
             <div className="my-[20px]">
               <input
                 type="file"
@@ -249,14 +246,6 @@ function Register({ isNightMode }: RegisterProps) {
               Зарегистрироваться
             </Button>
             <div className="flex justify-center">
-              {/* {showLoadingMessage && (
-                <span className="text-yellow-600">
-                  Подождите пока загрузятся данные
-                </span>
-              )} */}
-              {/* {showErrorMessage && (
-                <span className="text-red-600">Что-то пошло не так</span>
-              )} */}
               {errFile && <p className="text-red-600 text-center">{errFile}</p>}
             </div>
           </form>

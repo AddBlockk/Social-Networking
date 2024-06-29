@@ -86,21 +86,21 @@ function Login({ isNightMode }: LoginProps) {
               onFocus={handleInputFocus}
               onBlur={handleInputBlur}
             />
+            <Button
+              type="submit"
+              style={{
+                borderRadius: 20,
+                backgroundColor: "#8774e1",
+                marginBottom: "10px",
+                marginTop: "20px",
+                fontSize: "16px",
+                textTransform: "capitalize",
+                width: "100%",
+              }}
+              variant="contained">
+              Войти
+            </Button>
           </div>
-          <Button
-            type="submit"
-            style={{
-              borderRadius: 20,
-              backgroundColor: "#8774e1",
-              margin: "32px 0",
-              fontSize: "16px",
-              textTransform: "capitalize",
-              maxWidth: "100%",
-              width: "300px",
-            }}
-            variant="contained">
-            Войти
-          </Button>
           <div className="flex justify-center">
             {showLoadingMessage && (
               <span className="text-yellow-600">

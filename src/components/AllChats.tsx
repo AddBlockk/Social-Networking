@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useState, memo } from "react";
-import { Avatar } from "@mui/material";
-import { doc, onSnapshot, Timestamp } from "firebase/firestore";
+import React, { useContext, useEffect, useState } from "react";
+import { doc, onSnapshot, updateDoc, Timestamp } from "firebase/firestore";
 import { db } from "../firebase";
 import { AuthContext } from "../context/AuthContext";
 import { ChatContext } from "../context/ChatContext";
-import { ThemeContext, Theme } from "../context/ThemeProvider";
+import { ThemeContext } from "../context/ThemeProvider";
 import ChatItem from "./ChatItem";
 
 interface UserInfo {
@@ -28,16 +27,16 @@ interface Chat {
 }
 
 function AllChats() {
-  const [chats, setChats] = useState<Chat[]>([]);
   const { theme } = useContext<ThemeContext>(ThemeContext);
+  const [chats, setChats] = useState<Chat[]>([]);
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const { currentUser } = useContext(AuthContext);
   const { dispatch } = useContext(ChatContext);
-  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
   useEffect(() => {
     const getChats = () => {
       const userDocRef = currentUser?.uid
-        ? doc(db, "userChats", currentUser?.uid)
+        ? doc(db, "userChats", currentUser.uid)
         : null;
       if (userDocRef) {
         const unsub = onSnapshot(userDocRef, (doc) => {
@@ -66,6 +65,44 @@ function AllChats() {
     }
   };
 
+  const handleSendMessage = async (chatId: string, message: string) => {
+    // Создаем новую дату для нового сообщения
+    const date = Timestamp.now();
+
+    if (!currentUser) return;
+
+    // Обновляем чат локально
+    setChats((prevChats) => {
+      const updatedChats = prevChats.map((chat) => {
+        if (chat.id === chatId) {
+          return {
+            ...chat,
+            lastMessage: {
+              text: message,
+              senderId: currentUser.uid,
+              date,
+            },
+            date,
+          };
+        }
+        return chat;
+      });
+      // Сортируем чаты заново
+      updatedChats.sort((a, b) => b.date.toMillis() - a.date.toMillis());
+      return updatedChats;
+    });
+
+    // Обновляем чат в Firestore
+    await updateDoc(doc(db, "chats", chatId), {
+      lastMessage: {
+        text: message,
+        senderId: currentUser.uid,
+        date,
+      },
+      date,
+    });
+  };
+
   if (!theme) {
     return null;
   }
@@ -74,14 +111,19 @@ function AllChats() {
     <div>
       {chats.length > 0 &&
         chats
-          .filter((chat) => chat.date !== null)
-          .sort((a, b) => b.date.toMillis() - a.date.toMillis())
+          .sort((a, b) => {
+            if (!a.date || !b.date) {
+              return 0;
+            }
+            return b.date.toMillis() - a.date.toMillis();
+          })
           .map((chat) => (
             <ChatItem
               key={chat.id}
               chat={chat}
               handleSelect={handleSelect}
               selectedUserId={selectedUserId}
+              handleSendMessage={handleSendMessage}
               theme={theme}
             />
           ))}

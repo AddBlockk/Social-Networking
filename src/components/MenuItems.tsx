@@ -1,14 +1,6 @@
-import React, { useContext, useState } from "react";
-import {
-  Avatar,
-  Box,
-  ListItemIcon,
-  Menu,
-  MenuItem,
-  Switch,
-} from "@mui/material";
+import React from "react";
+import { Box, ListItemIcon, Menu, MenuItem, Switch } from "@mui/material";
 import ContrastIcon from "@mui/icons-material/Contrast";
-import { ThemeContext } from "../context/ThemeProvider";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import { Logout, Settings } from "@mui/icons-material";
@@ -18,6 +10,7 @@ type MenuItemsProps = {
   setAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
   isNightMode: boolean;
   toggleTheme: () => void;
+  setIsSettingsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const MenuItems: React.FC<MenuItemsProps> = ({
@@ -25,6 +18,7 @@ const MenuItems: React.FC<MenuItemsProps> = ({
   setAnchorEl,
   isNightMode,
   toggleTheme,
+  setIsSettingsOpen,
 }) => {
   const open = Boolean(anchorEl);
 
@@ -95,7 +89,11 @@ const MenuItems: React.FC<MenuItemsProps> = ({
         <Box sx={{ flexGrow: 1 }} />
         <Switch checked={isNightMode} />
       </MenuItem>
-      <MenuItem onClick={handleClose}>
+      <MenuItem
+        onClick={() => {
+          handleClose();
+          setIsSettingsOpen(true);
+        }}>
         <ListItemIcon>
           <Settings
             fontSize="small"

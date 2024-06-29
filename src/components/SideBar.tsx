@@ -15,7 +15,6 @@ import { db } from "../firebase";
 import { Avatar } from "@mui/material";
 import { AuthContext } from "../context/AuthContext";
 import AllChats from "./AllChats";
-import PersonalChats from "./PersonalChats";
 import { ThemeContext } from "../context/ThemeProvider";
 import "../ThemeStyles.scss";
 import MenuButton from "./MenuButton";
@@ -28,7 +27,11 @@ export interface User {
   uid: string;
 }
 
-function SideBar() {
+const SideBar = ({
+  setIsSettingsOpen,
+}: {
+  setIsSettingsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const [username, setUsername] = useState("");
   const [user, setUser] = useState<User | null>(null);
   const [err, setErr] = useState(false);
@@ -148,6 +151,7 @@ function SideBar() {
           setAnchorEl={setAnchorEl}
           isNightMode={isNightMode}
           toggleTheme={toggleTheme}
+          setIsSettingsOpen={setIsSettingsOpen}
         />
         {/* Поле поиска */}
         <SearchBar
@@ -244,7 +248,7 @@ function SideBar() {
             : "custom-scrollbarDark"
         }`}>
         {selectedTab === "all" && <AllChats />}
-        {selectedTab === "personal" && <PersonalChats />}
+        {selectedTab === "personal" && ""}
         {selectedTab === "unread" && (
           <div
             className={`text-white flex justify-center mt-10 ${
@@ -256,6 +260,6 @@ function SideBar() {
       </div>
     </div>
   );
-}
+};
 
 export default SideBar;

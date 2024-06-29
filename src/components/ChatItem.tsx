@@ -27,10 +27,11 @@ interface ChatItemProps {
   handleSelect: (u: Chat) => void;
   selectedUserId: string | null;
   theme: { themeType: string };
+  handleSendMessage: (chatId: string, message: string) => Promise<void>;
 }
 
 const ChatItem: React.FC<ChatItemProps> = memo(
-  ({ chat, handleSelect, selectedUserId, theme }) => {
+  ({ chat, handleSelect, selectedUserId, theme, handleSendMessage }) => {
     return (
       <div
         onClick={() => handleSelect(chat)}
